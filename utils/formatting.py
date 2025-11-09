@@ -61,11 +61,16 @@ def _plain_table(headers: list[str], rows: Iterable[Iterable[Any]]) -> None:
 
 def print_users(users) -> None:
     """
-    Pretty-print a list of User objects (id, name, created_at).
+    Pretty-print a list of User objects including email.
     """
-    headers = ["ID", "Name", "Created At"]
+    headers = ["ID", "Name", "Email", "Created At"]
     rows = (
-        (getattr(u, "id", "-"), getattr(u, "name", "-"), getattr(u, "created_at", "-"))
+        (
+            getattr(u, "id", "-"),
+            getattr(u, "name", "-"),
+            getattr(u, "email", "-"),
+            getattr(u, "created_at", "-"),
+        )
         for u in users
     )
 
