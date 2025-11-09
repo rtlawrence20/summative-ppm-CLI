@@ -15,12 +15,15 @@ def test_cli_add_user_project_task_complete(tmp_path, isolate_storage_paths):
     users_path = isolate_storage_paths.USERS_PATH
     projects_path = isolate_storage_paths.PROJECTS_PATH
 
-    # add-user (with email)
-    run(["add-user", "--name", "Alex", "--email", "alex@example.com"])
+    # add-user (email now optional)
+    run(["add-user", "--name", "Alex"])
     users = read_json(users_path)
     assert len(users) == 1
     assert users[0]["name"] == "Alex"
-    assert users[0]["email"] == "alex@example.com"
+
+    # May be absent or null depending on prior data; assert not required
+    assert "email" in users[0]  # stored as null for compatibility
+    assert users[0]["email"] is None
 
     # add-project for Alex
     run(["add-project", "--user", "Alex", "--title", "CLI Tool"])

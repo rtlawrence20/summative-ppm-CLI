@@ -1,24 +1,25 @@
-# tests/test_models.py
 import re
 
 
 def test_user_creation_and_serialization(make_user):
-    u = make_user(name="Bri", email="bri@example.com")
+    u = make_user(name="Bri", email=None)
     assert u.name == "Bri"
-    assert re.match(r".+@.+\..+", u.email)
+    # Email is optional now
+    assert u.email is None
     d = u.to_dict()
     assert d["name"] == "Bri"
-    assert d["email"] == "bri@example.com"
+    assert "email" in d and d["email"] is None
     # Round-trip
     from models.user import User
 
     u2 = User.from_dict(d)
     assert u2.name == "Bri"
-    assert u2.email == "bri@example.com"
+    assert u2.email is None
     assert u2.id == d["id"]
 
 
-def test_user_invalid_email_raises():
+# Email validation applies if provided; optional otherwise
+def test_user_invalid_email_raises_when_provided():
     from models.user import User
     import pytest
 

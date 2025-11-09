@@ -90,18 +90,18 @@ def cmd_add_user(args: argparse.Namespace) -> None:
     """
     users = load_users()
     name = args.name.strip()
-    email = args.email.strip().lower()
+    email = (args.email or "").strip().lower()
 
-    # Guard against duplicates by name or email
+    # Guard against duplicates by name; if email provided, also check duplicates by email
     for u in users:
         if u.name.lower() == name.lower():
             _warn(f"User with name '{name}' already exists.")
             return
-        if getattr(u, "email", "").lower() == email:
+        if email and (getattr(u, "email", "") or "").lower() == email:
             _warn(f"User with email '{email}' already exists.")
             return
 
-    user = User(name=name, email=email)
+    user = User(name=name, email=(email or None))
     users.append(user)
     save_users(users)
     _info(f"User created: {user}")
@@ -250,7 +250,7 @@ def build_parser() -> argparse.ArgumentParser:
     # add-user
     p = sub.add_parser("add-user", help="Create a user")
     p.add_argument("--name", required=True, help="User's name")
-    p.add_argument("--email", required=True, help="User's email address")
+    p.add_argument("--email", required=False, help="User's email address (optional)")
     p.set_defaults(func=cmd_add_user)
 
     # list-users

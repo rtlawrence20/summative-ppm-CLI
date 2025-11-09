@@ -45,7 +45,7 @@ def isolate_storage_paths(tmp_path, monkeypatch):
 def make_user():
     from models.user import User
 
-    def _make(name="Alex", email="alex@example.com"):
+    def _make(name="Alex", email=None):
         return User(name=name, email=email)
 
     return _make
