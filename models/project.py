@@ -87,5 +87,24 @@ class Project:
         project.tasks = [Task.from_dict(td) for td in data.get("tasks", [])]
         return project
 
+    def add_task(self, task: Task) -> None:
+        """Add a task to this project."""
+        self.tasks.append(task)
+
+    def remove_task(self, task_id: str) -> bool:
+        """Remove a task by id. Returns True if removed, False if not found."""
+        for i, t in enumerate(self.tasks):
+            if getattr(t, "id", None) == task_id:
+                self.tasks.pop(i)
+                return True
+        return False
+
+    def get_task(self, task_id: str) -> Optional[Task]:
+        """Retrieve a task by id, or None if not found."""
+        for t in self.tasks:
+            if getattr(t, "id", None) == task_id:
+                return t
+        return None
+
     def __repr__(self):
         return f"Project(id={self.id}, title={self.title}, due={self.due_date or '-'}, tasks={len(self.tasks)})"
