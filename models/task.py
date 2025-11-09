@@ -83,3 +83,7 @@ class Task:
     def __repr__(self):
         badge = "✓" if self.completed else "○"
         return f"Task({badge} {self.title}, status={self.status}, assigned_to={self.assigned_to or '-'})"
+
+    def __str__(self) -> str:
+        badge = "✓" if self.completed else "○"
+        return f"{badge} {self.title}"

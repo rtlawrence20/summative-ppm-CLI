@@ -108,3 +108,7 @@ class Project:
 
     def __repr__(self):
         return f"Project(id={self.id}, title={self.title}, due={self.due_date or '-'}, tasks={len(self.tasks)})"
+
+    def __str__(self) -> str:
+        due = self.due_date or "-"
+        return f"{self.title} (due {due}, {len(self.tasks)} task{'s' if len(self.tasks)!=1 else ''})"

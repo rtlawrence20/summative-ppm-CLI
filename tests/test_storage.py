@@ -2,11 +2,14 @@ from utils import storage
 
 
 def test_save_and_load_users(make_user):
-    users = [make_user("Alex", "alex@example.com"), make_user("Bri", "bri@example.com")]
+    users = [make_user("Alex", None), make_user("Bri", None)]
     storage.save_users(users)
     loaded = storage.load_users()
     assert len(loaded) == 2
-    assert {u.email for u in loaded} == {"alex@example.com", "bri@example.com"}
+    # Emails are optional; we created both with None above.
+    assert {u.email for u in loaded} == {None}
+    # Sanity check: names round-trip correctly.
+    assert {u.name for u in loaded} == {"Alex", "Bri"}
 
 
 def test_save_and_load_projects(make_project):
@@ -21,13 +24,13 @@ def test_save_and_load_projects(make_project):
 
 
 def test_lookup_helpers(make_user, make_project):
-    users = [make_user("Alex", "alex@example.com"), make_user("Bri", "bri@example.com")]
+    users = [make_user("Alex", None), make_user("Bri", None)]
     storage.save_users(users)
     projects = [make_project("Alpha", users[0].id), make_project("Bravo", users[1].id)]
     storage.save_projects(projects)
 
     u = storage.get_user_by_name(storage.load_users(), "alex")
-    assert u and u.email == "alex@example.com"
+    assert u and u.name == "Alex"
 
     p = storage.get_project_by_title(storage.load_projects(), "bravo")
     assert p and p.title == "Bravo"

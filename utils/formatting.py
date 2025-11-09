@@ -68,7 +68,7 @@ def print_users(users) -> None:
         (
             getattr(u, "id", "-"),
             getattr(u, "name", "-"),
-            getattr(u, "email", "-"),
+            (getattr(u, "email", None) or "-"),
             getattr(u, "created_at", "-"),
         )
         for u in users
